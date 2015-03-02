@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="HiPerForms">
+        <wb-resource deploy-path="/" source-path="/apps/HiPerForms/common"/>
+        <wb-resource deploy-path="/" source-path="/apps/HiPerForms/android"/>
+        <wb-resource deploy-path="/" source-path="/apps/HiPerForms/iphone"/>
+        <wb-resource deploy-path="/" source-path="/apps/HiPerForms/ipad"/>
+        <property name="context-root" value="HiPerForms"/>
+    </wb-module>
+</project-modules>

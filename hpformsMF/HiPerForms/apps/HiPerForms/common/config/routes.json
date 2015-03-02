@@ -1,0 +1,13 @@
+{
+    "routes": [
+        {
+            "name": "Main",
+            "template": "index.html",
+            "controllerClass": "Trasys.Hipermobile.MainController",
+            "fullPage": true,
+            "content": ""
+        }
+        
+    ],
+    "home": "Main"
+}

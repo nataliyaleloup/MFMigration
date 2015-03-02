@@ -1,0 +1,138 @@
+/* Reset CSS */
+a, abbr, address, article, aside, audio, b, blockquote, body, canvas, caption, cite, code, dd, del, details, dfn, dialog, div, dl, dt, em, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, p, pre, q, samp, section, small, span, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, ul, var, video {
+	margin: 0;
+	padding: 0;
+}
+
+/* Worklight container div */
+body {
+	height: 460px;
+	margin: 0 auto;
+	width: 320px;
+	/* don't show link callout on taphold on IOS */
+	-webkit-touch-callout: none !important;
+}
+
+/* Swipe works with mouse as well but often causes text selection. */
+#Main * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+/* Custom glyphish icons */
+.nav-glyphish-example .ui-btn { padding-top: 40px !important; }
+.nav-glyphish-example .ui-btn:after { width: 30px!important; height: 30px!important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; }
+#Main-footerOverview:after { background:  url('../images/104-index-cards.png') 50% 50% no-repeat; background-size: 26px 17px; }
+#Main-footerDetailed:after { background:  url('../images/14-tag.png') 50% 50% no-repeat; background-size: 22px 22px;  }
+#Main-footerMap:after { background:  url('../images/07-map-marker.png') 50% 50% no-repeat;  background-size: 16px 26px; }
+#Main-footerCalendar:after { background:  url('../images/83-calendar.png') 50% 50% no-repeat;  background-size: 23px 25px; }
+/* add whitespace between columns */
+/*
+#missionsGrid .ui-block-a, #missionsGrid .ui-block-b, #missionsGrid .ui-block-c {
+      padding-left: 2px !important; 
+      padding-right: 2px !important;
+}
+*/
+/* increase header height */
+.ui-header {
+    height: 50px;
+}
+
+/* mixing non text and text buttons in controlgroup fix */
+.headerTextButton {
+/*    height: 26px; */
+/*    line-height: 26px; */
+	height: 26px;
+    vertical-align: middle;
+    display: table-cell; 
+}
+
+#Main-error-popup {
+	min-width:300px;
+	max-width:500px;
+}
+
+#Login-popup {
+	min-width:300px;
+	max-width:500px;	
+}
+
+/* debug panel */
+.debug-panel {
+	display: none;
+    background-color: #ABABAB;
+    padding: 10px;
+    color: white;     
+}
+
+/* fix textinput doesn't work on device */
+/* REF: http://stackoverflow.com/questions/12812587/phonegap-styles-webkit-user-select-none-disabling-text-field */
+input, textarea {
+    -webkit-user-select: auto !important;
+}
+
+#DetailedSearch-results .ui-block-a {
+	width: 70% !important;
+}
+#DetailedSearch-results .ui-block-b {
+	text-align:right; 
+	width: 30% !important;	
+}
+
+#MissionsOverview-today .ui-li-count,
+#MissionsOverview-favorites .ui-li-count,
+#MissionsOverview-outdated .ui-li-count,
+#MissionsOverview-new .ui-li-count,
+#MissionsOverview-unplanned .ui-li-count,
+#MissionDetails-tasksHeader .ui-li-count,
+#MissionDetails-commentsHeader .ui-li-count,
+#MissionDetails-signaturesHeader .ui-li-count,
+#MissionDetails-photosHeader .ui-li-count
+{
+	right: 3.5em !important;
+}
+
+
+
+/* add space between tasks */
+#MissionDetails-tasks div {
+	padding-bottom: 10px;
+}
+
+.photoThumbnail img {
+	vertical-align: middle;
+}
+
+.photoThumbnail {
+	padding: 10px;
+	text-align: center;
+}
+
+.selectedTask, .selectedSignature, .selectedPhoto, .selectedDocument {
+	 background-color: blue;
+}
+
+.missionTask, .missionSignature {
+	padding: 10px;
+}
+
+div.noScroll {
+	overflow: hidden;	
+}
+div.yesScroll {
+	overflow: auto;	
+}
+.hidden {
+	display: none !important;
+}
+
+div.DisplayDocument-iconButtonBorder .ui-btn-icon-notext.ui-corner-all {
+    -webkit-border-radius: .7125em;
+    border-radius: .7125em;
+    padding: 10px;
+}
+
+#DisplayDocument-controls .ui-input-text { width: 80px; !important }

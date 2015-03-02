@@ -1,0 +1,43 @@
+{
+    "JSONStore.userName": "HiPerForms",
+    "JSONStore.encryptionSuffix": "HIPERFORMS",
+
+	"services.IErrorHandlerService.implementation": "Trasys.Common.WorkLight.Service.WLErrorHandlerService",
+	"services.IErrorHandlerService.errorpopup.popupID": "Main-error-popup",
+	"services.IErrorHandlerService.errorpopup.messageID": "Main-error-msg",
+    "services.IFormService.implementation": "Trasys.Hipermobile.Form.Service.FormService",
+    "services.IFormHtmlService.implementation": "Trasys.Hipermobile.Form.Service.FormHtmlService",
+
+    "i18n.locales": "en,fr,nl",
+	"i18n.locales.default": "en",
+	"i18n.bundle.path": "bundles/",
+	"i18n.bundle.baseName": "messages",
+	
+	"dateFormat.short": "dd/mm/yy",
+	"moment.dateFormat.short": "DD/MM/YYYY",
+	"moment.dateFormat.dateTime.short": "D/M/YYYY HH:mm",
+	"moment.dateFormat.dateTime.long": "MMMM Do YYYY HH:mm",
+	"moment.dateFormat.time": "HH:mm",
+	"moment.dateFormat.date.long": "MMMM Do, YYYY",
+	"moment.dateFormat.date.long2": "dddd, MMMM Do, YYYY",
+	"moment.dateFormat.dateTime.long2": "dddd, MMMM Do, YYYY, HH:mm",
+	
+	"developerOptions.enable": true,
+	"developerOptions.console": true,
+	"developerOptions.prototypes": true,
+	"developerOptions.sampleData": true,
+	"developerOptions.sampleData.path": "bundles/forms_examples.json",
+	"developerOptions.sampleData.datesAsDiffs": true,
+	
+	"pageTransition": "fade",
+	"pageTransition.fade.outDelay": 150,
+	"pageTransition.fade.inDelay": 50,
+	
+	"resize.callbackDelay": 500,
+
+	"calendar.timeFormat": "HH:mm",
+	"calendar.columnFormat.month": "ddd",
+	"calendar.columnFormat.agendaWeek": "ddd D/M",
+	"calendar.columnFormat.agendaDay": "dddd"
+	
+}

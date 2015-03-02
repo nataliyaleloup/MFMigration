@@ -1,0 +1,13 @@
+adapters
+apps/HiPerForms/android/css
+apps/HiPerForms/android/js
+apps/HiPerForms/common
+apps/HiPerForms/ipad/css
+apps/HiPerForms/ipad/js
+apps/HiPerForms/legal
+apps/HiPerForms/application-descriptor.xml
+apps/HiPerForms/build-settings.xml
+etc
+server
+build.xml
+ci-env.properties

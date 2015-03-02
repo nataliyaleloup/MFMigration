@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed Materials - Property of IBM
+    5725-I43 (C) Copyright IBM Corp. 2011, 2013. All Rights Reserved.
+    US Government Users Restricted Rights - Use, duplication or
+    disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+-->
+<wl:adapter name="HiPerAdapter"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:wl="http://www.worklight.com/integration"
+	xmlns:http="http://www.worklight.com/integration/http">
+
+	<displayName>HiPerAdapter</displayName>
+	<description>HiPerAdapter</description>
+	<connectivity>
+		<connectionPolicy xsi:type="http:HTTPConnectionPolicyType">
+			<protocol>http</protocol>
+			<domain>hiperservices.azurewebsites.net</domain>
+			<port>80</port>
+			<proxy>
+			    <protocol>http</protocol>
+			    <domain>proxyblue.trasys.be</domain>
+			    <port>80</port>
+			    <authentication>
+			        <basic/>
+			        <serverIdentity>
+			            <username>srv-trg</username>
+			            <password>srvtrg201201</password>
+			        </serverIdentity>
+			    </authentication>
+			</proxy>
+		</connectionPolicy>
+		<loadConstraints maxConcurrentConnectionsPerNode="2" />
+	</connectivity>
+
+	<procedure name="submitAuthentication"/>
+	<procedure name="getProfileById" securityTest="HiPerTest"/>
+	<procedure name="getContractsByProfileId" securityTest="HiPerTest"/>	
+	<procedure name="getContractByProfileIdAndContractId" securityTest="HiPerTest"/>
+	
+</wl:adapter>

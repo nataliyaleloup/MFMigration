@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Replicate" basedir=".">
+	
+	<!-- Entry point that is called in order to replicate the current project. -->
+	<target name="replicate">
+		<echo>${basedir}</echo>
+	    <echo level="info">Deleting [${replicateProject.target.name}] from [${replicateProject.target.parentDir}]...</echo>
+		<property name="replicateProject.target.dir" location="${replicateProject.target.parentDir}/${replicateProject.target.name}"/>
+		<property name="replicateProject.source.dir" location="${basedir}"/>
+		<basename file="${replicateProject.source.dir}" property="replicateProject.source.name"/>
+		<property name="replicateProject.source.appDir" location="${replicateProject.source.dir}/apps/${replicateProject.source.name}"/>
+		<property name="replicateProject.target.appDir" location="${replicateProject.target.dir}/apps/${replicateProject.target.name}"/>
+		
+	    <delete dir="${replicateProject.target.dir}"/>
+	    <echo level="info">Creating project [${replicateProject.target.name}]...</echo>
+	    <exec executable="${replicateProject.cliPath}" dir="${replicateProject.target.parentDir}" failonerror="true">
+  			<arg value="create"/>
+  			<arg value="${replicateProject.target.name}"/>
+  		</exec>
+		
+	    <echo level="info">Creating hybrid app...</echo>
+	    <exec executable="${replicateProject.cliPath}" dir="${replicateProject.target.dir}" failonerror="true">
+  			<arg value="add"/>
+  			<arg value="hybrid"/>
+  			<arg value="${replicateProject.target.name}"/>
+  		</exec>
+		
+	    <echo level="info">Creating environments...</echo>
+		<foreach target="replicate.environment" param="replicateProject.environmentPath" inheritall="true">
+			<path>
+				<dirset dir="${replicateProject.source.dir}/apps/${replicateProject.source.name}" casesensitive="yes">
+					<include name="*"/>
+				</dirset>
+			</path>
+		</foreach>
+
+		<echo level="info">Copying pre-build resources...</echo>
+		<antcall target="replicate.copyResources">
+			<param name="replicate.resourceListFile" value="${basedir}/etc/ant/replicate/replicate.prebuild.paths"/>
+		</antcall>
+		<echo level="info">Building project...</echo>
+	    <exec executable="${replicateProject.cliPath}" dir="${replicateProject.target.dir}" failonerror="true">
+  			<arg value="build"/>
+  		</exec>
+		<echo level="info">Copying post-build resources...</echo>
+		<antcall target="replicate.copyResources">
+			<param name="replicate.resourceListFile" value="${basedir}/etc/ant/replicate/replicate.postbuild.paths"/>
+		</antcall>
+	</target>
+    
+	<!-- Copy the resources listed in "replicate.resourceListFile" from the source project to the target project. -->
+	<target name="replicate.copyResources">
+		<loadfile property="replicateProject.copyPaths" srcFile="${replicate.resourceListFile}"/>
+		<for list="${replicateProject.copyPaths}" delimiter="${line.separator}" param="sourceFilePath">
+			<sequential>
+				<propertyregex override="yes" property="targetFilePath" input="@{sourceFilePath}" 
+					regexp="([.]*\/)${replicateProject.source.name}(\/[.]*)" replace="\1${replicateProject.target.name}\2"
+					defaultvalue="@{sourceFilePath}"/>
+				<if>
+					<available file="${replicateProject.source.dir}/@{sourceFilePath}" type="dir"/>
+					<then>
+						<delete dir="${replicateProject.target.dir}/${targetFilePath}" quiet="true"/>
+						<mkdir dir="${replicateProject.target.dir}/${targetFilePath}"/>
+						<copy todir="${replicateProject.target.dir}/${targetFilePath}">
+							<fileset dir="${replicateProject.source.dir}/@{sourceFilePath}">
+								<include name="**/*"/>
+							</fileset>
+						</copy>
+					</then>
+					<elseif>
+						<available file="${replicateProject.source.dir}/@{sourceFilePath}" type="file"/>
+						<then>
+							<delete file="${replicateProject.target.dir}/${targetFilePath}" quiet="true"/>
+							<copy file="${replicateProject.source.dir}/@{sourceFilePath}" tofile="${replicateProject.target.dir}/${targetFilePath}"/>
+							<replace file="${replicateProject.target.dir}/${targetFilePath}" token="${replicateProject.source.name}" value="${replicateProject.target.name}"/>
+						</then>
+					</elseif>
+					<else>
+						<echo level="warning">Resource to replicate [${replicateProject.source.dir}/@{sourceFilePath}] was not found</echo>
+					</else>
+				</if>
+			</sequential>
+		</for>
+	</target>
+	
+	<!-- Target called to use the command line utility to replicate a specific environment. -->
+	<target name="replicate.environment">
+		<basename property="replicateProject.environmentName" file="${replicateProject.environmentPath}"/>
+		<if>
+			<matches pattern="${replicateProject.environments}" string="${replicateProject.environmentName}"/>
+			<then>
+				<echo message="Replicating ${replicateProject.environmentName} environment"/>
+			    <exec executable="${replicateProject.cliPath}" dir="${replicateProject.target.appDir}" failonerror="true">
+		  			<arg value="add"/>
+		  			<arg value="environment"/>
+		  			<arg value="-t"/>
+		  			<arg value="${replicateProject.environmentName}"/>
+		  		</exec>
+			</then>
+		</if>
+	</target>
+		
+</project>

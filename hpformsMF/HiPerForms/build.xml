@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Worklight" basedir=".">
+    
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="etc/lib/ant-contrib/ant-contrib-1.0b3.jar" />
+		</classpath>
+	</taskdef>
+
+	<!-- Check the value of the 'target.env' property. Fail if it is not accepted. -->
+	<target name="check-env" unless="check-env_done">
+	    <if>
+	        <not><isset property="target.env"/></not>
+	        <then>
+	            <property name="target.env" value="dev"/>
+	        </then>
+	    </if>
+		<if>
+			<available file="${target.env}-env.properties" />
+			<then>
+				<echo message="Target environment set to [${target.env}]" level="info" />
+    			<property file="${target.env}-env.properties"/>
+			</then>
+			<else>
+				<echo message="${target.env}-env.properties does not exist please create that file or select a different environment" level="error" />
+				<fail message="${target.env}-env.properties does not exist please create that file or select a different environment" />
+			</else>
+		</if>
+		<property name="check-env_done" value="true"/>
+	</target>
+
+	<target name="setup-worklight-tasks" depends="check-env" unless="setup-worklight-tasks_done">
+	    <taskdef resource="com/worklight/ant/defaults.properties">
+			<classpath>
+				<pathelement location="${worklight_ant_builder_path}"/>
+			</classpath>
+		</taskdef>
+		<taskdef resource="com/worklight/ant/deployers/antlib.xml">
+			<classpath>
+		    	<pathelement location="${worklight_ant_deployer_path}"/>
+			</classpath>
+		</taskdef>
+		<property name="setup-worklight-tasks_done" value="true"/>
+	</target>
+	
+	<target name="clean" depends="check-env" unless="clean_done" description="Clean generated build files">
+	    <delete dir="bin/war"/>
+	    <delete dir="bin/classes"/>
+		<delete>
+			<fileset dir="bin" includes="*.*"/>
+		</delete>
+		<property name="clean.replicateToDelete" location="${replicateProject.target.parentDir}/${replicateProject.target.name}"/>
+		<delete dir="${clean.replicateToDelete}"/>
+		<property name="clean_done" value="true"/>
+   	</target>
+	
+	<target name="war" unless="war_done" depends="setup-worklight-tasks" description="Build project war">
+	    <mkdir dir="bin"/>
+		<echo message="Removing previous files" level="info"/>
+	    <delete dir="bin/war"/>
+	    <delete dir="bin/classes"/>
+		<delete>
+			<fileset dir="bin" includes="*.war"/>
+		</delete>
+		<war-builder projectfolder="."
+		    destinationfolder="bin/war"
+		    warfile="bin/${runtime_name}.war"/>
+		<property name="war_done" value="true"/>
+	</target>
+	
+	<target name="install" unless="install_done" depends="war, setup-worklight-tasks" description="Install project war and configure server and DB">
+	    <configureapplicationserver contextroot="/${application_context}">
+	        <project warfile="bin/${runtime_name}.war"/>
+	        <applicationserver>
+	            <websphereapplicationserver installdir="${server_install_dir}" profile="Liberty">
+	                <server name="${server_name}"/>
+                </websphereapplicationserver>
+	        </applicationserver>
+			<database kind="Worklight">
+				<mysql database="${database_worklight_name}" server="${database_worklight_server}" user="${database_worklight_user}" password="${database_worklight_password}"/>
+				<driverclasspath>
+					<pathelement location="${database_worklight_driverPath}"/>
+				</driverclasspath>
+			</database>
+			<database kind="WorklightReports">
+				<mysql database="${database_worklightReports_name}" server="${database_worklightReports_server}" user="${database_worklightReports_user}" password="${database_worklightReports_password}"/>
+				<driverclasspath>
+					<pathelement location="${database_worklightReports_driverPath}"/>
+				</driverclasspath>
+			</database>
+	    </configureapplicationserver>
+		<property name="install_done" value="true"/>
+	</target>
+	
+	<target name="uninstall" unless="uninstall_done" depends="war, setup-worklight-tasks" description="Uninstall project war and unconfigure server and DB">
+	    <unconfigureapplicationserver contextroot="/${application_context}">
+	        <project warfile="bin/${runtime_name}.war"/>
+	        <applicationserver>
+	            <websphereapplicationserver installdir="${server_install_dir}" profile="Liberty">
+	                <server name="${server_name}"/>
+                </websphereapplicationserver>
+	        </applicationserver>
+			<database kind="Worklight">
+				<mysql database="${database_worklight_name}" server="${database_worklight_server}" user="${database_worklight_user}" password="${database_worklight_password}"/>
+				<driverclasspath>
+					<pathelement location="${database_worklight_driverPath}"/>
+				</driverclasspath>
+			</database>
+			<database kind="WorklightReports">
+				<mysql database="${database_worklightReports_name}" server="${database_worklightReports_server}" user="${database_worklightReports_user}" password="${database_worklightReports_password}"/>
+				<driverclasspath>
+					<pathelement location="${database_worklightReports_driverPath}"/>
+				</driverclasspath>
+			</database>
+		</unconfigureapplicationserver>
+		<property name="uninstall_done" value="true"/>
+	</target>
+
+	<target name="build" unless="build_done" depends="setup-worklight-tasks" description="Build adapters and apps">
+	    <mkdir dir="bin"/>
+		<echo message="Removing previous files" level="info"/>
+		<delete>
+			<fileset dir="bin" includes="*.wlapp"/>
+			<fileset dir="bin" includes="*.adapter"/>
+		</delete>
+    	<if>
+    	    <available file="adapters" type="dir"/>
+    	    <then>
+				<echo message="Building adapters" level="info"/>
+				<foreach target="build-adapter" param="adapterPath" inheritall="true">
+					<path>
+						<dirset dir="adapters" casesensitive="yes">
+							<include name="*"/>
+						</dirset>
+					</path>
+				</foreach>
+	    	</then>
+    	    <else>
+    	        <echo message="No adapters to build" level="info"/>
+    	    </else>
+		</if>
+		<echo message="Building applications" level="info"/>
+		<foreach target="build-app" param="appPath" inheritall="true">
+			<path>
+				<dirset dir="apps" casesensitive="yes">
+					<include name="*"/>
+				</dirset>
+			</path>
+		</foreach>
+		<property name="build_done" value="true"/>
+	</target>
+	
+	<target name="deploy"  unless="deploy_done" depends="build, setup-worklight-tasks" description="Deploy adapters and apps">
+    	<if>
+    	    <available file="adapters" type="dir"/>
+    	    <then>
+				<echo message="Deploying adapters" level="info"/>
+				<foreach target="deploy-adapter" param="adapterPath" inheritall="true">
+					<path>
+						<dirset dir="adapters" casesensitive="yes">
+							<include name="*"/>
+						</dirset>
+					</path>
+				</foreach>
+	    	</then>
+    	</if>
+		<echo message="Deploying applications" level="info"/>
+		<foreach target="deploy-app" param="appPath" inheritall="true">
+			<path>
+				<dirset dir="apps" casesensitive="yes">
+					<include name="*"/>
+				</dirset>
+			</path>
+		</foreach>
+		<property name="deploy_done" value="true"/>	
+	</target>
+	
+	<target name="build-app">
+		<basename property="appName" file="${appPath}"/>
+		<echo message="Building app [${appName}]..." level="info"/>
+		<app-builder
+			worklightserverhost="${server_url}/${application_context}"
+			applicationFolder="apps/${appName}"
+			nativeProjectPrefix="${appName}"
+			outputFolder="bin"/>
+		<echo message="App [${appName}] built." level="info"/>
+	</target>
+
+	<target name="build-adapter">
+		<basename property="adapterName" file="${adapterPath}"/>
+		<echo message="Building adapter [${adapterName}]..." level="info"/>
+		<adapter-builder
+			folder="adapters/${adapterName}"
+			destinationfolder="bin"/>
+		<echo message="Adapter [${adapterName}] built." level="info"/>
+	</target>
+		
+	<target name="post-curl">
+	    <exec executable="curl" failonerror="true" outputproperty="curl-output" errorproperty="curl-output-error">
+  			<arg value="-u"/>
+  			<arg value="${admin_services_user}:${admin_services_pass}"/>
+  			<arg value="-F"/>
+  			<arg value="FILE=@${post-curl.file}"/>
+  			<arg value="${admin_services_url}/management-apis/1.0/runtimes/${runtime_name}/${post-curl.urlPart}"/>
+  		</exec>
+  		<if>
+  		    <not><contains string="${curl-output}" substring="SUCCESS"/></not>
+  		    <then>
+  		        <echo level="error">${curl-output}</echo>
+  		        <echo level="error">${curl-output-error}</echo>
+  		        <fail message="cURL upload failed"/>
+  		    </then>
+  		</if>
+	</target>
+	
+	<target name="deploy-app">
+		<basename property="appName" file="${appPath}"/>
+	    <if>
+	    	<equals arg1="${admin_deploy_curl}" arg2="true"/>
+	    	<then>
+				<echo message="Deploying app [${appName}] using cURL..." level="info" />
+				<antcall target="post-curl" inheritAll="true">
+				    <param name="post-curl.file" value="bin/${appName}-all.wlapp"/>
+				    <param name="post-curl.urlPart" value="applications"/>
+				</antcall>
+	    	</then>
+	    	<else>
+				<echo message="Deploying app [${appName}] using wladm..." level="info"/>
+				<wladm url="${admin_services_url}" user="${admin_services_user}" password="${admin_services_pass}" secure="false">
+		      		<deploy-app runtime="${runtime_name}" file="bin/${appName}-all.wlapp"/>
+		    	</wladm>
+	    	</else>
+    	</if>	    
+		<echo message="App [${appName}] deployed." level="info"/>
+	</target>
+	
+	<target name="deploy-adapter">
+		<basename property="adapterName" file="${adapterPath}"/>
+	    <if>
+	    	<equals arg1="${admin_deploy_curl}" arg2="true"/>
+	    	<then>
+				<echo message="Deploying adapter [${adapterName}] using cURL..." level="info"/>
+				<antcall target="post-curl" inheritAll="true">
+				    <param name="post-curl.file" value="bin/${adapterName}.adapter"/>
+				    <param name="post-curl.urlPart" value="adapters"/>
+				</antcall>
+	    	</then>
+	    	<else>
+				<echo message="Deploying adapter [${adapterName}] using wladm..." level="info"/>	    	    
+				<wladm url="${admin_services_url}" user="${admin_services_user}" password="${admin_services_pass}" secure="false">
+			    	<deploy-adapter runtime="${runtime_name}" file="bin/${adapterName}.adapter"/>
+			  	</wladm>
+	    	</else>
+    	</if>	    
+		<echo message="Adapter [${adapterName}] deployed." level="info"/>
+	</target>
+	
+	<target name="minimal-update" depends="setup-worklight-tasks">
+	    <updateapplicationserver>
+	        <project warfile="bin/${runtime_name}.war"/>
+	        <applicationserver>
+	            <websphereapplicationserver installdir="${server_install_dir}" profile="Liberty">
+	                <server name="${server_name}"/>
+                </websphereapplicationserver>
+	        </applicationserver>
+			<database kind="Worklight">
+				<mysql database="${database_worklight_name}" server="${database_worklight_server}" user="${database_worklight_user}" password="${database_worklight_password}"/>
+				<driverclasspath>
+					<pathelement location="${database_worklight_driverPath}"/>
+				</driverclasspath>
+			</database>
+			<database kind="WorklightReports">
+				<mysql database="${database_worklightReports_name}" server="${database_worklightReports_server}" user="${database_worklightReports_user}" password="${database_worklightReports_password}"/>
+				<driverclasspath>
+					<pathelement location="${database_worklightReports_driverPath}"/>
+				</driverclasspath>
+			</database>
+	    </updateapplicationserver>
+  	</target>
+  	
+	<target name="replicate" description="Replicate the current project (intended for forks)" depends="check-env">
+		<ant antfile="etc/ant/replicate/replicate.build.xml" target="replicate" inheritall="true"/>
+	</target>
+		
+</project>

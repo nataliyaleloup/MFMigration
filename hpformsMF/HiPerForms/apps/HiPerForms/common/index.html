@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HiPerForms mobile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="lib/jqueryMobile/dist/jquery.mobile.css">
+<link rel="stylesheet"
+	href="lib/jqueryMobile/dist/jquery.mobile.external-png.css">
+<link rel="stylesheet"
+	href="lib/jqueryMobile/dist/jquery.mobile.icons.css">
+<link rel="stylesheet"
+	href="lib/jqueryMobile/dist/jquery.mobile.inline-png.css">
+<link rel="stylesheet"
+	href="lib/jqueryMobile/dist/jquery.mobile.inline-svg.css">
+<link rel="stylesheet"
+	href="lib/jqueryMobile/dist/jquery.mobile.structure.css">
+<link rel="stylesheet"
+	href="lib/jqueryMobile/dist/jquery.mobile.theme.css">
+<link rel="stylesheet" href="css/jquery.mobile.datepicker.css">
+<link rel="stylesheet" href="css/leaflet.css">
+<link rel="stylesheet" href="css/fullcalendar.css">
+<link rel="stylesheet" href="css/stylesdesign.css">
+<link rel="stylesheet" href="css/environment_correction.css">
+<script>
+	window.$ = window.jQuery = WLJQ;
+</script>
+<script src="lib/jqueryMobile/dist/jquery.mobile.js"></script>
+<!--<script src="lib/lodash/lodash.min.js"></script>
+<!--<script src="lib/i18n/jquery.i18n.properties-1.0.9.js"></script>
+<!--<script src="lib/datepicker/jquery.ui.datepicker.js"></script>
+<!--<script src="lib/datepicker/jquery.mobile.datepicker.js"></script>
+<!--<script src="lib/datepicker/jquery.ui.datepicker-fr.js"></script>
+<!--<script src="lib/datepicker/jquery.ui.datepicker-nl.js"></script>
+<!--<script src="lib/datepicker/jquery.ui.datepicker-en.js"></script>
+<!--<script src="lib/moment/moment-with-langs.js"></script>
+<!--<script src="lib/taphold/taphold.js"></script>
+<!--<script src="lib/jquery/jquery.scrollTo.min.js"></script>
+<!--<script src="lib/hammer/hammer.min.js"></script>
+<!--<script src="lib/when/when.js"></script>
+<!--<script src="lib/jqm-mvc/trasys.jqm-mvc.1.0.0.min.js"></script>-->
+<!--<script src="lib/worklight-foundation/trasys.worklight-foundation.0.1.1.js"></script>-->
+</head>
+<body>
+<div data-role="page" id="Main">
+
+<div id="Status-bar"></div>
+		<div id="Main-header" data-role="header" data-position="fixed"
+			data-theme="a" data-tap-toggle="false">
+			<h1 id="Main-title" data-translate="Main.header.title"></h1>
+			<div data-type="horizontal" data-role="controlgroup"
+				class="ui-btn-left">
+				<a href="#Main-left-panel" data-role="button"> <span
+					class="steadysets icon-list"></span>
+				</a>
+				<a id="Main-back" data-role="button"> <span
+					class="steadysets icon-arrow-left"></span> <span
+					data-translate="Main.header.back">Back</span>
+				</a>
+				</div>
+</div>		
+		<div data-role="panel" id="Main-left-panel" data-theme="a"
+			data-swipe-close="false" data-display="overlay">
+			<ul id="Main-menu" data-role="listview">
+			<li>
+				<a href="#" id="Main-menu-forms"><h3 data-translate="Main.menu.forms">Forms</h3></a>
+				</li>
+				<li>
+				<a href="#" id="Main-menu-formshtml"><h3 data-translate="Main.menu.formshtml">Forms</h3></a>
+				</li>
+				<li>
+				<a href="#" id="Main-menu-theform"><h3 data-translate="Main.menu.theform">The Form</h3></a>
+				</li>
+				<li>
+				<a href="#" id="Main-menu-connect-server"><h3 data-translate="Main.menu.connect">Connect to server</h3></a>
+				</li>
+				<li>
+					<a href="#" id="Main-menu-load-data"><h3 data-translate="Main.menu.load">Load data</h3></a>
+				</li>
+				<li>
+					<a href="#" id="Main-menu-language"><h3 data-translate="Main.menu.language">Switch language</h3></a>
+				</li>
+				
+			</ul>
+		</div>	
+	
+	<div id="Main-content" data-role="content"></div>
+	
+	<div data-role="popup" id="Main-generic-popup" class="ui-content"
+			data-overlay-theme="a" data-dismissible="false"></div>
+	
+	</div>
+	<script src="js/out.js"></script>
+	<script src="js/initOptions.js"></script>
+</body>
+</html>

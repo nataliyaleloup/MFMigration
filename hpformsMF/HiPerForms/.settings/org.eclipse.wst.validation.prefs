@@ -1,0 +1,16 @@
+DELEGATES_PREFERENCE=delegateValidatorList
+USER_BUILD_PREFERENCE=enabledBuildValidatorListorg.eclipse.wst.wsi.ui.internal.WSIMessageValidator;
+USER_MANUAL_PREFERENCE=enabledManualValidatorListorg.eclipse.wst.wsi.ui.internal.WSIMessageValidator;
+USER_PREFERENCE=overrideGlobalPreferencestruedisableAllValidationfalseversion1.2.500.v201303130500
+eclipse.preferences.version=1
+override=true
+suspend=false
+vals/com.ibm.etools.webtools.json.core.json/groups=0107include02111contentType136org.eclipse.wst.jsdt.core.jsonSourceT07fileext04jsonF0107exclude0104file119config/node_modulesF02
+vals/org.eclipse.jst.jsf.ui.JSFAppConfigValidator/global=FF01
+vals/org.eclipse.jst.jsp.core.JSPBatchValidator/global=FF01
+vals/org.eclipse.jst.jsp.core.JSPContentValidator/global=FF01
+vals/org.eclipse.wst.html.core.HTMLValidator/groups=0107include06111contentType136org.eclipse.wst.html.core.htmlsourceT07fileext04htmlF07fileext05xhtmlF07fileext03htmF07fileext04htplF07fileext03wmlF0107exclude0304file178config/node_modules/grunt-template-jasmine-istanbul/doc/assets/vendor/prettifyF0204file2140config/node_modules/grunt-template-jasmine-istanbul/node_modules/istanbul/node_modules/js-yaml/node_modules/argparse/node_modules/underscoreF0204file192config/node_modules/grunt/node_modules/js-yaml/node_modules/argparse/node_modules/underscoreF02
+vals/org.eclipse.wst.jsdt.web.core.JsBatchValidator/global=TT01
+vals/org.eclipse.wst.jsdt.web.core.JsBatchValidator/groups=0107include01113projectNature134org.eclipse.wst.jsdt.core.jsNature0107include11007fileext04htmlF07fileext05xhtmlF07fileext03htmF07fileext04htplF07fileext03jspF07fileext03jsfF07fileext03jsvF07fileext04jtplF111contentType136org.eclipse.wst.html.core.htmlsourceT111contentType134org.eclipse.jst.jsp.core.jspsourceT0107exclude0104file119config/node_modulesF02
+vals/org.eclipse.wst.xml.core.xml/global=TF03
+vf.version=3
